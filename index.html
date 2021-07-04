@@ -2,18 +2,131 @@
 <html>
 <head>
 <body>
+<div class='controls'>
+    <button class="btn play" disabled>loading...</button>
+    <button class="btn stop" disabled>stop</button>
+</div>
 
 <script>
-var audioContext = new AudioContext();
+    var ss = 0;
+    var ee = 0;
+    // Mouse Control and / or two tracks/panners
+var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
+    sampleURL = 'https://dl.dropboxusercontent.com/s/qo2ootyr0ier8uh/dinky-jam-2.mp3',
+    sampleBuffer, sound, playButton = document.querySelector('.play'),
+    stopButton = document.querySelector('.stop'),
+    loop = false, mousepan = false,
+    loopButton = document.querySelector('.loop');
+var gainNode = audioContext.createGain();
+// load our sound
+init();
 
-    var audioRequest = new XMLHttpRequest();
-    audioRequest.open("GET", "https://dl.dropboxusercontent.com/s/qo2ootyr0ier8uh/dinky-jam-2.mp3", true);
-    audioRequest.responseType = "arraybuffer";
-    audioRequest.onload = function() {
-        audioContext.decodeAudioData( audioRequest.response ); 
-    
+function init() {
+    loadSound(sampleURL);
+}
+
+// listen for changes to panning slider and update
+
+playButton.onclick = function () {
+    playSound();
+};
+
+stopButton.onclick = function () {
+    stopSound();
+};
+
+function loadSound(url) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
+
+    request.onload = function () {
+        audioContext.decodeAudioData(request.response, function (buffer) {
+            sampleBuffer = buffer;
+            playButton.disabled = false;
+            playButton.innerHTML = 'play';
+        });
+    };
+    request.send();
+}
+
+
+function setupSound() {
+    sound = audioContext.createBufferSource();
+    sound.buffer = sampleBuffer;
+    sound.loop = loop;
+
+  sound.connect(gainNode);
+    gainNode.connect(audioContext.destination);    
+
+}
+
+
+function playSound() {
+    setupSound();
+    UI('play');
+    sound.start(0);
+    sound.onended = function () {
+        UI('stop');
     }
-    audioRequest.send();
+}
+
+// stop sound and enable / disable buttons
+function stopSound() {
+    UI('stop');
+    sound.stop(0);
+}
+
+function UI(state) {
+    switch (state) {
+        case 'play':
+            playButton.disabled = true;
+            stopButton.disabled = false;
+        
+            break;
+        case 'stop':
+            playButton.disabled = false;
+            stopButton.disabled = true;
+        
+            break;
+    }
+}
+
+
+  
+    var buffer = audioContext.createBuffer(1, 1, 22050);
+    var source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+
+    
+    if (window.DeviceMotionEvent == undefined) {
+        //No accelerometer is present. Use buttons. 
+        alert("no accelerometer");
+    }
+    else {
+        alert("accelerometer found");
+        window.addEventListener("devicemotion", accelerometerUpdate, true);
+    }
+
+    function accelerometerUpdate(e) {
+   var aX = event.accelerationIncludingGravity.x*1;
+   var aY = event.accelerationIncludingGravity.y*1;
+   var aZ = event.accelerationIncludingGravity.z*1;
+   //The following two lines are just to calculate a
+   // tilt. Not really needed. 
+        if(aY>5){ss=e.timeStamp;};
+        if(aY>3){ee=e.timeStamp;}
+        
+        var vv = (ss-ee)/1000;
+        gainNode.gain.value = vv/1000;
+   xPosition = Math.atan2(aY, aZ);
+   yPosition = Math.atan2(aX, aZ);
+    
+       
+   document.body.innerHTML = aY;
+}
 </script>
 
 </body>
