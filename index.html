@@ -4,25 +4,21 @@
 <body>
 
 <script>
-    if (window.DeviceMotionEvent == undefined) {
-        //No accelerometer is present. Use buttons. 
-        alert("no accelerometer");
-    }
-    else {
-        alert("accelerometer found");
-        window.addEventListener("devicemotion", accelerometerUpdate, true);
-    }
-    
-    function accelerometerUpdate(e) {
-   var aX = event.accelerationIncludingGravity.x*1;
-   var aY = event.accelerationIncludingGravity.y*1;
-   var aZ = event.accelerationIncludingGravity.z*1;
-   //The following two lines are just to calculate a
-   // tilt. Not really needed. 
-   xPosition = Math.atan2(aY, aZ);
-   yPosition = Math.atan2(aX, aZ);
-   document.body.innerHTML = aY;
-}
+var lastTimestamp;
+var speedX = 0, speedY = 0, speedZ = 0;
+window.addEventListener('devicemotion', function(event) {
+  var currentTime = new Date().getTime();
+  if (lastTimestamp === undefined) {
+    lastTimestamp = new Date().getTime();
+    return; //ignore first call, we need a reference time
+  }
+  //  m/s² / 1000 * (miliseconds - miliseconds)/1000 /3600 => km/h (if I didn't made a mistake)
+  speedX += event.acceleration.x / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
+  //... same for Y and Z
+  lastTimestamp = currentTime;
+    document.body.innerHTML = speedX;
+}, false);
+   
 </script>
 
 </body>
