@@ -4,8 +4,7 @@
 <body>
 
 <script>
-
- if (window.DeviceMotionEvent == undefined) {
+    if (window.DeviceMotionEvent == undefined) {
         //No accelerometer is present. Use buttons. 
         alert("no accelerometer");
     }
@@ -18,11 +17,13 @@
    var aX = event.accelerationIncludingGravity.x*1;
    var aY = event.accelerationIncludingGravity.y*1;
    var aZ = event.accelerationIncludingGravity.z*1;
-
-   document.body.write("s");
+   //The following two lines are just to calculate a
+   // tilt. Not really needed. 
+   xPosition = Math.atan2(aY, aZ);
+   yPosition = Math.atan2(aX, aZ);
+   document.body.innerHTML = aY;
 }
 </script>
 
 </body>
 </html>
-
