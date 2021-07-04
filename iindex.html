@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
-<head>
-<body>
-<div class='controls'>
+<html><div class='controls'>
     <button class="btn play" disabled>loading...</button>
     <button class="btn stop" disabled>stop</button>
 </div>
+<head>
+<body>
+
 
 <script>
     var ss = 0;
@@ -120,7 +120,7 @@ function UI(state) {
         if(aY>3){ee=e.timeStamp;}
         
         var vv = (ss-ee)/1000;
-        gainNode.gain.value = vv/1000;
+        gainNode.gain.value = vv;
    xPosition = Math.atan2(aY, aZ);
    yPosition = Math.atan2(aX, aZ);
     
