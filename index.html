@@ -4,25 +4,16 @@
 <body>
 
 <script>
-    if (window.DeviceMotionEvent == undefined) {
-        //No accelerometer is present. Use buttons. 
-        alert("no accelerometer");
-    }
-    else {
-        alert("accelerometer found");
-        window.addEventListener("devicemotion", accelerometerUpdate, true);
-    }
+var audioContext = new AudioContext();
 
-    function accelerometerUpdate(e) {
-   var aX = event.accelerationIncludingGravity.x*1;
-   var aY = event.accelerationIncludingGravity.y*1;
-   var aZ = event.accelerationIncludingGravity.z*1;
-   //The following two lines are just to calculate a
-   // tilt. Not really needed. 
-   xPosition = Math.atan2(aY, aZ);
-   yPosition = Math.atan2(aX, aZ);
-   document.body.innerHTML = aY;
-}
+    var audioRequest = new XMLHttpRequest();
+    audioRequest.open("GET", "https://dl.dropboxusercontent.com/s/qo2ootyr0ier8uh/dinky-jam-2.mp3", true);
+    audioRequest.responseType = "arraybuffer";
+    audioRequest.onload = function() {
+        audioContext.decodeAudioData( audioRequest.response ); 
+    
+    }
+    audioRequest.send();
 </script>
 
 </body>
