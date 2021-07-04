@@ -13,10 +13,10 @@ window.addEventListener('devicemotion', function(event) {
     return; //ignore first call, we need a reference time
   }
   //  m/s² / 1000 * (miliseconds - miliseconds)/1000 /3600 => km/h (if I didn't made a mistake)
-  speedX += event.acceleration.x / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
+  speedY += event.acceleration.y / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
   //... same for Y and Z
   lastTimestamp = currentTime;
-    document.body.innerHTML = "s" + speedX;
+    document.body.innerHTML = "s" + speedY;
 }, false);
    
 </script>
