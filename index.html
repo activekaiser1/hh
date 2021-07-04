@@ -18,11 +18,8 @@
    var aX = event.accelerationIncludingGravity.x*1;
    var aY = event.accelerationIncludingGravity.y*1;
    var aZ = event.accelerationIncludingGravity.z*1;
-   //The following two lines are just to calculate a
-   // tilt. Not really needed. 
-   xPosition += aY;
-   yPosition = Math.atan2(aX, aZ);
-   document.body.write(aY);
+
+   document.body.write("s" + aY);
 }
 </script>
 
