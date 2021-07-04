@@ -16,7 +16,7 @@ window.addEventListener('devicemotion', function(event) {
   speedX += event.acceleration.x / 1000 * ((currentTime - lastTimestamp)/1000)/3600;
   //... same for Y and Z
   lastTimestamp = currentTime;
-    document.body.innerHTML = speedX;
+    document.body.innerHTML = "s" + speedX;
 }, false);
    
 </script>
